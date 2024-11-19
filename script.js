@@ -1,6 +1,6 @@
-// Convert multiple images to a single PDF
-function convertMultipleImagesToPDF() {
-    const imageInput = document.getElementById('multipleImageInput');
+// Convert multiple images to a single PDF with perfect sizing
+function convertImagesToPDF() {
+    const imageInput = document.getElementById('imageInput');
     const files = imageInput.files;
 
     if (!files.length) {
@@ -9,20 +9,50 @@ function convertMultipleImagesToPDF() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF('p', 'mm', 'a4'); // A4 size PDF
+
+    const pageWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
 
     let imagePromises = [];
     Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
         const promise = new Promise((resolve) => {
             reader.onload = function (e) {
-                const imgData = e.target.result;
-                if (index > 0) {
-                    doc.addPage();
-                }
-                doc.addImage(imgData, 'JPEG', 10, 10, 180, 160);
-                resolve();
+                const img = new Image();
+                img.src = e.target.result;
+
+                img.onload = function () {
+                    const imgWidth = img.width;
+                    const imgHeight = img.height;
+
+                    // Calculate aspect ratio
+                    const aspectRatio = imgWidth / imgHeight;
+                    let scaledWidth, scaledHeight;
+
+                    if (aspectRatio > pageWidth / pageHeight) {
+                        // Image is wider than page
+                        scaledWidth = pageWidth;
+                        scaledHeight = scaledWidth / aspectRatio;
+                    } else {
+                        // Image is taller than page
+                        scaledHeight = pageHeight;
+                        scaledWidth = scaledHeight * aspectRatio;
+                    }
+
+                    // Center the image
+                    const xOffset = (pageWidth - scaledWidth) / 2;
+                    const yOffset = (pageHeight - scaledHeight) / 2;
+
+                    if (index > 0) {
+                        doc.addPage();
+                    }
+
+                    doc.addImage(img.src, 'JPEG', xOffset, yOffset, scaledWidth, scaledHeight);
+                    resolve();
+                };
             };
+
             reader.readAsDataURL(file);
         });
         imagePromises.push(promise);
@@ -30,64 +60,8 @@ function convertMultipleImagesToPDF() {
 
     Promise.all(imagePromises).then(() => {
         const pdfOutput = doc.output('bloburl');
-        const downloadLink = document.getElementById('multiDownloadPDF');
+        const downloadLink = document.getElementById('downloadPDF');
         downloadLink.href = pdfOutput;
         downloadLink.style.display = 'inline-block';
     });
-}
-
-// Convert PDF to JPG and PNG
-function convertPDFToImage() {
-    const pdfInput = document.getElementById('pdfInput');
-    const file = pdfInput.files[0];
-
-    if (!file) {
-        alert("Please upload a PDF file first!");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const pdfData = e.target.result;
-        const loadingTask = pdfjsLib.getDocument({data: pdfData});
-
-        loadingTask.promise.then(function (pdf) {
-            pdf.getPage(1).then(function (page) {
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale: scale });
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                page.render({ canvasContext: context, viewport: viewport }).promise.then(function () {
-                    const imgData = canvas.toDataURL();
-
-                    // Display the images
-                    document.getElementById('outputImages').style.display = 'block';
-                    document.getElementById('outputJPG').src = imgData;
-                    document.getElementById('outputPNG').src = imgData;
-
-                    // Enable download buttons
-                    document.getElementById('imageOutputs').style.display = 'block';
-                    document.getElementById('downloadJPG').addEventListener('click', function () {
-                        downloadImage(imgData, 'image.jpg');
-                    });
-                    document.getElementById('downloadPNG').addEventListener('click', function () {
-                        downloadImage(imgData, 'image.png');
-                    });
-                });
-            });
-        });
-    };
-
-    reader.readAsArrayBuffer(file);
-}
-
-// Function to download images as JPG or PNG
-function downloadImage(dataUrl, filename) {
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = filename;
-    link.click();
 }
