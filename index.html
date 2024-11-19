@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivek Rathod</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Image & PDF Converter</h1>
+            <p>Convert images to PDF</p>
+        </header>
+
+        <main>
+            <!-- Image to Single PDF Section -->
+            <section class="converter-section">
+                <h2>Convert Images to a PDF</h2>
+                <div class="upload-box">
+                    <input type="file" id="multipleImageInput" accept="image/*" multiple>
+                    <button onclick="convertMultipleImagesToPDF()">Generate PDF</button>
+                </div>
+                <a id="multiDownloadPDF" href="#" style="display:none" download="images.pdf" class="download-btn">Download PDF</a>
+            </section>
+
+            <!-- PDF to Images Section -->
+            <section class="converter-section">
+                <h2>Convert PDF to JPG & PNG</h2>
+                <div class="upload-box">
+                    <input type="file" id="pdfInput" accept="application/pdf">
+                    <button onclick="convertPDFToImage()">Generate Images</button>
+                </div>
+                <div id="imageOutputs" class="output-box" style="display:none">
+                    <button id="downloadJPG" class="download-btn" download="image.jpg">Download JPG</button>
+                    <button id="downloadPNG" class="download-btn" download="image.png">Download PNG</button>
+                </div>
+                <div id="outputImages" class="output-preview" style="display:none">
+                    <img id="outputJPG" src="" alt="JPG Preview">
+                    <img id="outputPNG" src="" alt="PNG Preview">
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Vivek Rathod. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
