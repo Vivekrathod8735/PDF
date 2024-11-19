@@ -1,9 +1,9 @@
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f4f8;
+    background-color: #f9f9f9;
     color: #333;
 }
 
@@ -11,7 +11,7 @@ body {
     width: 90%;
     max-width: 800px;
     margin: 20px auto;
-    background: #f0f4f8;
+    background: #fff;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
@@ -20,32 +20,21 @@ body {
 
 header h1 {
     font-size: 2rem;
-    color: black;
+    color: gray;
 }
 
 header p {
     margin: 10px 0 20px;
     font-size: 1.1rem;
-    color: #666;
+    color: #555;
 }
 
 h2 {
     font-size: 1.5rem;
-    color: #333;
     margin-bottom: 10px;
+    color: #333;
 }
 
-footer {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #777;
-}
-
-footer p {
-    margin: 0;
-}
-
-/* Upload and Download Buttons */
 .upload-box {
     margin: 20px 0;
 }
@@ -61,8 +50,8 @@ input[type="file"] {
 }
 
 button {
-    background-color: grey;
-    color: white;
+    background-color: gray;
+    color: silver;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -88,11 +77,12 @@ button:hover {
     background-color: #218838;
 }
 
-/* Output Preview */
-.output-preview img {
-    width: 100%;
-    max-width: 300px;
-    margin: 10px auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+footer p {
+    margin: 0;
 }
